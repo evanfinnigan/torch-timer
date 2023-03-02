@@ -12,6 +12,7 @@ var paused = true
 var intervalId
 
 var endTime = Date.now() + 60*60*1000
+var pauseTime = Date.now()
 var fire = document.getElementById("torchImg")
 var frame = 0
 
@@ -31,11 +32,13 @@ pauseButton.onclick = function() {
   if (paused) {
     this.innerText = 'Pause';
     paused = false
+    endTime += Date.now() - pauseTime
     intervalId = setInterval(updateTorch, 1000/8)
     setText()
   } else {
     this.innerText = "Play"
     paused = true
+    pauseTime = Date.now()
     setText()
     clearInterval(intervalId)
   }
@@ -52,6 +55,7 @@ timeSlider.onchange = function(e) {
   endSound.pause()
   paused = true
   pauseButton.innerText = "Play"
+  pauseTime = Date.now()
   endTime = Date.now() + 60*1000*e.target.value
   setText()
 }
