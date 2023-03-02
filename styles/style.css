@@ -1,0 +1,60 @@
+body {
+  font-family: 'Montserrat', Arial;
+  font-size: 48px;
+  color: rgb(67, 67, 67);
+  text-align: center;
+  background-color: black;
+}
+
+@font-face {
+  font-family: "JSL Blackletter";
+  src: url("JBLACK.TTF");
+}
+
+#time {
+  font-family: 'JSL Blackletter', 'Montserrat', Arial;
+}
+
+canvas {
+  margin: 25px;
+}
+
+button {
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  background: #6868686e; /* Grey background */
+}
+
+.slider {
+  direction: rtl;
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 250px; /* Full-width */
+  height: 15px; /* Specified height */
+  border-radius: 15px;
+  background: #d3d3d31c; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 20px; /* Set a specific slider handle width */
+  height: 20px; /* Slider handle height */
+  border-radius: 50%;
+  background: #464646; /* Grey background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 20px; /* Set a specific slider handle width */
+  height: 20px; /* Slider handle height */
+  border-radius: 50%;
+  background: #3c3c3c; /* Grey background */
+  cursor: pointer; /* Cursor on hover */
+}

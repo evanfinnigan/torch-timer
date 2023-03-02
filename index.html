@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shadowdark Torch Timer</title>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Permanent+Marker&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" media="print" href="styles/print.css" />
+    <script src="torch.js" defer></script>
+  </head>
+
+  <body>
+    <button id="pause">Play</button>
+    <button id="torch">Light Torch</button>
+    <div id="fire-div" class="fire-div">
+      <!-- <img id="fire-gif" src="img/fire.png" alt="Burning Torch"> -->
+      <canvas id="canvas" width="300" height="600"></canvas>
+      <div style="display:none;">
+        <img id="torchImg" src="img/torch_sheet_2.png">
+        <p>Image by upklyak on Freepik</p>
+      </div>
+      
+    </div>
+    <p style="margin:0"><span id="time">60:00</span></p>
+    <div><input type="range" min="0" max="60" value="60" step="any" class="slider" id="timeSlider"></div>
+  </body>
+
+</html> 
