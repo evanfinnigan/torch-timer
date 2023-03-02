@@ -1,5 +1,4 @@
 
-// var fireImg = document.getElementById("fire-gif")
 var canvas = document.getElementById("canvas")
 var ctx = canvas.getContext("2d")
 var pauseButton = document.getElementById("pause")
@@ -75,7 +74,9 @@ function updateTorch() {
   // console.log(ctx.globalAlpha)
   if (paused != true) {
     if (alpha*60 > 0) {
-      timeSlider.value = "" + alpha*60
+      if (timeSlider != document.activeElement) {
+        timeSlider.value = "" + alpha*60
+      }
     } else {
       timeSpan.innerText = "Darkness surrounds you. Death is near."
       ctx.globalAlpha = 0
