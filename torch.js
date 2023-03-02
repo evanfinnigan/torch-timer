@@ -5,12 +5,13 @@ var ctx = canvas.getContext("2d")
 var pauseButton = document.getElementById("pause")
 var torchButton = document.getElementById("torch")
 var timeSlider = document.getElementById("timeSlider")
+var endSound = document.getElementById("sound")
 var timeSpan = document.getElementById("time")
 var alpha = 1
 var paused = true
 var intervalId
 
-// var fire = new Image('torch_spritesheet.jpg')
+var endTime = Date.now() + 60*60*1000
 var fire = document.getElementById("torchImg")
 var frame = 0
 
@@ -18,6 +19,9 @@ ctx.clearRect(0,0,800,500)
 
 
 function setText() {
+  // get real time.
+  alpha = (endTime - Date.now())/(1000*60*60)
+
   let minutes = `${Math.floor(alpha*60)}`.padStart(2, '0')
   let seconds = `${Math.floor(alpha*60*60%60)}`.padStart(2, '0')
   timeSpan.innerText = `${paused ? "Game Paused ... ": ""}${minutes}:${seconds}`
@@ -38,20 +42,24 @@ pauseButton.onclick = function() {
 }
 
 torchButton.onclick = function() {
-  alpha = 1
+  endTime = Date.now() + 1000*60*60
+  endSound.pause()
   setText()
 }
 
 timeSlider.onchange = function(e) {
   clearInterval(intervalId)
+  endSound.pause()
   paused = true
   pauseButton.innerText = "Play"
-  alpha = e.target.value/60
+  endTime = Date.now() + 60*1000*e.target.value
   setText()
 }
 
 function updateTorch() {
   
+  setText()
+
   ctx.globalAlpha = 1
   ctx.fillRect(0,0,300,600)
 
@@ -62,13 +70,12 @@ function updateTorch() {
   }
   // console.log(ctx.globalAlpha)
   if (paused != true) {
-    alpha -= 1/(60*60*8)
     if (alpha*60 > 0) {
-      setText()
       timeSlider.value = "" + alpha*60
     } else {
       timeSpan.innerText = "Darkness surrounds you. Death is near."
       ctx.globalAlpha = 0
+      endSound.play()
     }
   }
 
