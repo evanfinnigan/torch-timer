@@ -27,6 +27,11 @@ button {
   background: #6868686e; /* Grey background */
 }
 
+#torchImg {
+  margin-top: 1em;
+  border-radius: 30px;
+}
+
 .slider {
   direction: rtl;
   -webkit-appearance: none;  /* Override default CSS styles */
