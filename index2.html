@@ -1,32 +1,28 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Shadowdark Torch Timer</title>
+    <title>Shadowdark Torch</title>
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Permanent+Marker&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" media="print" href="styles/print.css" />
-    <script src="torch.js" defer></script>
+    <script src="torch2.js" defer></script>
   </head>
 
   <body>
     <button id="pause">Play</button>
     <button id="torch">Light Torch</button>
     <div id="fire-div" class="fire-div">
-      <!-- <img id="fire-gif" src="img/fire.png" alt="Burning Torch"> -->
-      <canvas id="canvas" width="300" height="600"></canvas>
+      <img id="torchImg" src="img/fire.gif" alt="Burning Torch">
       <div style="display:none;">
-        <img id="torchImg" src="img/torch_sheet_2.png">
         <audio id="sound" paused="true" src="img/darkness.mp3"></audio>
-        <p>Image by upklyak on Freepik</p>
       </div>
-      
     </div>
-    <p style="margin:0"><span id="time">60:00</span></p>
+    <p style="margin:0"><span id="time"></span></p>
     <div><input type="range" min="0.02" max="60" value="60" step="any" class="slider" id="timeSlider"></div>
-    <a href="index2.html" style="font-size: small; color: grey;">Timeless Torch</a>
+    <a href="index.html" style="font-size: small; color: grey;">Torch with Timer</a>
   </body>
 
 </html> 
