@@ -22,12 +22,14 @@ pauseButton.onclick = function() {
   if (paused) {
     this.innerText = 'Pause';
     paused = false
+    fire.src = "img/fire.gif"
     endTime += Date.now() - pauseTime
     intervalId = setInterval(updateTorch, 1000/8)
     setText()
   } else {
     this.innerText = "Play"
     paused = true
+    fire.src = "img/fire.png"
     pauseTime = Date.now()
     setText()
     clearInterval(intervalId)
