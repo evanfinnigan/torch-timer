@@ -12,8 +12,6 @@
   </head>
 
   <body>
-    <button id="pause">Play</button>
-    <button id="torch">Light Torch</button>
     <div id="fire-div" class="fire-div">
       <!-- <img id="fire-gif" src="img/fire.png" alt="Burning Torch"> -->
       <canvas id="canvas" width="300" height="600"></canvas>
@@ -22,10 +20,20 @@
         <audio id="sound" paused="true" src="img/darkness.mp3"></audio>
         <p>Image by upklyak on Freepik</p>
       </div>
-      
+      <div id="torch-extinguished-overlay">
+        <p class="message message-first-time">Unseen horrors lurk in the darkness.</p>
+        <p class="message message-extinguished hidden">Darkness surrounds you. Death is near.</p>
+        <button id="light-torch">Light a torch</button>
+      </div>
     </div>
     <p style="margin:0"><span id="time">60:00</span></p>
-    <div><input type="range" min="0.02" max="60" value="60" step="any" class="slider" id="timeSlider"></div>
+    <div>
+      <button id="pause">Play</button>
+      <input type="range" min="0" max="60" value="60" step="0.5" class="slider" id="timeSlider">
+    </div>
+    <div>
+      <button id="torch">Reset Torch</button>
+    </div>
     <a href="index2.html" style="font-size: small; color: grey;">Timeless Torch</a>
   </body>
 

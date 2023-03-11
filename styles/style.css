@@ -11,18 +11,24 @@ body {
   src: url("JBLACK.TTF");
 }
 
-#time {
+#time, .message {
   font-family: 'JSL Blackletter', 'Montserrat', Arial;
+}
+
+.hidden {
+  display: none !important;
 }
 
 canvas {
   margin: 25px;
+  height: 60vh;
+  max-height: 60vh;
 }
 
 button {
   color: white;
   border: none;
-  padding: 10px;
+  padding: 15px 20px;
   border-radius: 5px;
   background: #6868686e; /* Grey background */
 }
@@ -62,4 +68,20 @@ button {
   border-radius: 50%;
   background: #3c3c3c; /* Grey background */
   cursor: pointer; /* Cursor on hover */
+}
+
+.fire-div {
+  position: relative;
+}
+
+#torch-extinguished-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  place-content: center;
+  align-items: center;
 }

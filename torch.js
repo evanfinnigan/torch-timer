@@ -2,67 +2,121 @@
 var canvas = document.getElementById("canvas")
 var ctx = canvas.getContext("2d")
 var pauseButton = document.getElementById("pause")
-var torchButton = document.getElementById("torch")
+var resetTorchButton = document.getElementById("torch")
 var timeSlider = document.getElementById("timeSlider")
 var endSound = document.getElementById("sound")
 var timeSpan = document.getElementById("time")
+var extinguishedOverlay = document.getElementById('torch-extinguished-overlay')
+var lightAnotherTorchButton = document.getElementById('light-torch');
 var alpha = 1
 var paused = true
 var intervalId
 
-var endTime = Date.now() + 60*60*1000
-var pauseTime = Date.now()
+var torchDuration; // unit: milliseconds
+var timeRemaining = 0; // unit: milliseconds
+
+// var fire = new Image('torch_spritesheet.jpg')
 var fire = document.getElementById("torchImg")
 var frame = 0
+var hasTorch = false
+
 
 ctx.clearRect(0,0,800,500)
 
-
-function setText() {
-  // get real time.
-  alpha = (endTime - Date.now())/(1000*60*60)
-
-  let minutes = `${Math.floor(alpha*60)}`.padStart(2, '0')
-  let seconds = `${Math.floor(alpha*60*60%60)}`.padStart(2, '0')
-  timeSpan.innerText = `${paused ? "Game Paused ... ": ""}${minutes}:${seconds}`
+function setTorchDurationMinutes(mins) {
+  torchDuration = mins * 60 * 1000;
+  timeSlider.max = mins;
+  timeRemaining = Math.min(timeRemaining, torchDuration)
 }
 
-pauseButton.onclick = function() {
-  if (paused) {
-    this.innerText = 'Pause';
-    paused = false
-    endTime += Date.now() - pauseTime
-    intervalId = setInterval(updateTorch, 1000/8)
-    setText()
+function lightTorch(duration) {
+  hasTorch = true;
+  timeRemaining = duration === undefined ? torchDuration : duration;
+  endSound.pause()
+  setText();
+  setIsRunning(true);
+  extinguishedOverlay.classList.add('hidden');
+}
+
+function onTorchBurnedOut() {
+  hasTorch = false;
+  setIsRunning(false);
+  showExtinguishedOverlay();
+}
+
+function showExtinguishedOverlay() {
+  extinguishedOverlay.classList.remove('hidden');
+  let firstTimeMessage = extinguishedOverlay.querySelector('.message-first-time');
+  let extinguishedMessage = extinguishedOverlay.querySelector('.message-extinguished');
+  firstTimeMessage.classList.add('hidden');
+  extinguishedMessage.classList.remove('hidden')
+}
+
+
+function setText() {
+  let remainingSec = timeRemaining / 1000;
+  let minutes = `${Math.floor(remainingSec / 60)}`.padStart(2, '0')
+  let seconds = `${Math.floor(remainingSec % 60)}`.padStart(2, '0')
+
+  if (remainingSec <= 0) {
+    timeSpan.innerText = 'Torch has burned out';
   } else {
-    this.innerText = "Play"
-    paused = true
-    pauseTime = Date.now()
-    setText()
-    clearInterval(intervalId)
+    timeSpan.innerText = `${hasTorch && paused ? "Game Paused ... ": ""}${minutes}:${seconds}`
   }
 }
 
-torchButton.onclick = function() {
-  endTime = Date.now() + 1000*60*60
-  endSound.pause()
-  setText()
+function setIsRunning(isRunning) {
+  if (isRunning) {
+    pauseButton.innerText = 'Pause';
+    paused = false
+    if (!intervalId) {
+      lastUpdateTime = Date.now();
+      intervalId = setInterval(updateTorch, 1000/8)
+    }
+    setText()
+  } else {
+    pauseButton.innerText = "Play"
+    paused = true
+    endSound.pause();
+    setText()
+    clearInterval(intervalId);
+    intervalId = undefined;
+  }
 }
 
-timeSlider.onchange = function(e) {
-  clearInterval(intervalId)
-  endSound.pause()
-  paused = true
-  pauseButton.innerText = "Play"
-  pauseTime = Date.now()
-  endTime = Date.now() + 60*1000*e.target.value
-  setText()
+pauseButton.onclick = function() {
+  if (!hasTorch) {
+    lightTorch(timeRemaining);
+  } else {
+    setIsRunning(paused);
+  }
+};
+
+canvas.onclick = function() {
+  if (hasTorch) {
+    setIsRunning(paused);
+  }
 }
 
+lightAnotherTorchButton.onclick = function () {
+  lightTorch(timeRemaining > 0 ? timeRemaining : torchDuration);
+}
+
+resetTorchButton.onclick = function () {
+  lightTorch(torchDuration);
+}
+
+timeSlider.oninput = function(e) {
+  setIsRunning(false);
+  timeRemaining = Math.max(5, Math.floor(e.target.value * 60)) * 1000;
+  setText();
+}
+
+var lastUpdateTime = undefined;
 function updateTorch() {
-  
   setText()
 
+  alpha = (timeRemaining)/(1000*60*60)
   ctx.globalAlpha = 1
   ctx.fillRect(0,0,300,600)
 
@@ -72,13 +126,18 @@ function updateTorch() {
     ctx.globalAlpha = alpha
   }
   // console.log(ctx.globalAlpha)
-  if (paused != true) {
-    if (alpha*60 > 0) {
+  if (!paused) {
+    timeRemaining -= (Date.now() - lastUpdateTime);
+    lastUpdateTime = Date.now();
+
+    if (timeRemaining > 0) {
       if (timeSlider != document.activeElement) {
         timeSlider.value = "" + alpha*60
       }
     } else {
-      timeSpan.innerText = "Darkness surrounds you. Death is near."
+      if (hasTorch) {
+        onTorchBurnedOut()
+      }
       ctx.globalAlpha = 0
       endSound.play()
     }
@@ -96,3 +155,7 @@ function updateTorch() {
   ctx.drawImage(fire, 759*frame,0,759,1650,0,0,300,600)
 }
 
+// TODO: there could be a config option to set the duration, and this could be stored 
+// in localStorage
+setTorchDurationMinutes(60);
+timeRemaining = torchDuration;
