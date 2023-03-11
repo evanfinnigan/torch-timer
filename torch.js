@@ -15,7 +15,6 @@ var intervalId
 var torchDuration; // unit: milliseconds
 var timeRemaining = 0; // unit: milliseconds
 
-// var fire = new Image('torch_spritesheet.jpg')
 var fire = document.getElementById("torchImg")
 var frame = 0
 var hasTorch = false
