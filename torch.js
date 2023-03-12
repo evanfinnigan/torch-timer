@@ -28,9 +28,13 @@ function setTorchDurationMinutes(mins) {
   timeRemaining = Math.min(timeRemaining, torchDuration)
 }
 
-function lightTorch(duration) {
+function lightTorch(overrideDuration) {
   hasTorch = true;
-  timeRemaining = duration === undefined ? torchDuration : duration;
+  if (overrideDuration === undefined) {
+    timeRemaining = timeRemaining > 0 ? timeRemaining : torchDuration;
+  } else {
+    timeRemaining = overrideDuration;
+  }
   endSound.pause()
   setText();
   setIsRunning(true);
@@ -41,6 +45,8 @@ function onTorchBurnedOut() {
   hasTorch = false;
   setIsRunning(false);
   showExtinguishedOverlay();
+  endSound.currentTime = 0;
+  endSound.play()
 }
 
 function showExtinguishedOverlay() {
@@ -53,15 +59,10 @@ function showExtinguishedOverlay() {
 
 
 function setText() {
-  let remainingSec = timeRemaining / 1000;
+  let remainingSec = Math.max(0, timeRemaining / 1000);
   let minutes = `${Math.floor(remainingSec / 60)}`.padStart(2, '0')
   let seconds = `${Math.floor(remainingSec % 60)}`.padStart(2, '0')
-
-  if (remainingSec <= 0) {
-    timeSpan.innerText = 'Torch has burned out';
-  } else {
-    timeSpan.innerText = `${hasTorch && paused ? "Game Paused ... ": ""}${minutes}:${seconds}`
-  }
+  timeSpan.innerText = `${hasTorch && paused ? "Game Paused ... ": ""}${minutes}:${seconds}`
 }
 
 function setIsRunning(isRunning) {
@@ -85,7 +86,7 @@ function setIsRunning(isRunning) {
 
 pauseButton.onclick = function() {
   if (!hasTorch) {
-    lightTorch(timeRemaining);
+    lightTorch();
   } else {
     setIsRunning(paused);
   }
@@ -98,10 +99,12 @@ canvas.onclick = function() {
 }
 
 lightAnotherTorchButton.onclick = function () {
-  lightTorch(timeRemaining > 0 ? timeRemaining : torchDuration);
+  // this will use the current slider value, or reset it if empty
+  lightTorch();
 }
 
 resetTorchButton.onclick = function () {
+  // always reset torch to the full duration
   lightTorch(torchDuration);
 }
 
@@ -138,7 +141,6 @@ function updateTorch() {
         onTorchBurnedOut()
       }
       ctx.globalAlpha = 0
-      endSound.play()
     }
   }
 
