@@ -62,7 +62,7 @@ function setText() {
   let remainingSec = Math.max(0, timeRemaining / 1000);
   let minutes = `${Math.floor(remainingSec / 60)}`.padStart(2, '0')
   let seconds = `${Math.floor(remainingSec % 60)}`.padStart(2, '0')
-  timeSpan.innerText = `${hasTorch && paused ? "Game Paused ... ": ""}${minutes}:${seconds}`
+  timeSpan.innerText = `${hasTorch && paused ? "Paused: ": ""}${minutes}:${seconds}`
 }
 
 function setIsRunning(isRunning) {
